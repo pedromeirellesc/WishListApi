@@ -1,0 +1,15 @@
+{
+    "name": "pedromeirellesc/wishlist-api",
+    "authors": [
+        {
+            "name": "Pedro Meirelles Carrion",
+            "email": "102702917+pedromeirellesc@users.noreply.github.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
