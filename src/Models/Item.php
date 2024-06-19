@@ -12,8 +12,16 @@ class Item extends Database
         $pdo = self::getConnection();
 
         $stmt = $pdo->prepare("
-            INSERT INTO items (wish_list_id, name, description, price, priority, status)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO items (
+                wish_list_id,
+                name, 
+                description, 
+                price, 
+                priority, 
+                status,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
 
         $stmt->execute([
@@ -22,7 +30,8 @@ class Item extends Database
             $data['description'],
             $data['price'],
             $data['priority'],
-            $data['status']
+            $data['status'],
+            date('Y-m-d H:i:s')
         ]);
 
         return $pdo->lastInsertId() > 0 ? true : false;
@@ -42,7 +51,8 @@ class Item extends Database
                 description = ?,
                 price = ?,
                 priority = ?,
-                status = ?
+                status = ?,
+                updated_at = ?
             WHERE 
                 id = ?
         ');
@@ -53,8 +63,9 @@ class Item extends Database
         $price = $data['price'] ?? '';
         $priority = $data['priority'] ?? '';
         $status = $data['status'] ?? '';
+        $updatedAt = date('Y-m-d H:i:s');
 
-        $stmt->execute([$wishListId, $name, $description, $price, $priority, $status, $id]);
+        $stmt->execute([$wishListId, $name, $description, $price, $priority, $status, $updatedAt, $id]);
 
         return $stmt->rowCount() > 0 ? true : false;
     }

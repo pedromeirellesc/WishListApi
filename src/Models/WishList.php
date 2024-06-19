@@ -12,14 +12,22 @@ class WishList extends Database
         $pdo = self::getConnection();
 
         $stmt = $pdo->prepare("
-            INSERT INTO wish_lists (category_id, name, description)
-            VALUES (?, ?, ?)
+            INSERT INTO 
+                wish_lists 
+                (
+                    category_id,
+                    name,
+                    description,
+                    created_at
+                )
+            VALUES (?, ?, ?, ?)
         ");
 
         $stmt->execute([
             $data['category_id'],
             $data['name'],
-            $data['description']
+            $data['description'],
+            date('Y-m-d H:i:s'),
         ]);
 
         return $pdo->lastInsertId() > 0 ? true : false;
@@ -55,7 +63,8 @@ class WishList extends Database
             SET 
                 category_id = ?,
                 name = ?,
-                description ?
+                description = ?,
+                updated_at = ?
             WHERE 
                 id = ?
         ');
@@ -63,8 +72,9 @@ class WishList extends Database
         $categoryId = $data['category_id'] ?? '';
         $name = $data['name'] ?? '';
         $description = $data['description'] ?? '';
+        $updatedAt = date('Y-m-d H:i:s');
 
-        $stmt->execute([$categoryId, $name, $description, $id]);
+        $stmt->execute([$categoryId, $name, $description, $updatedAt, $id]);
 
         return $stmt->rowCount() > 0 ? true : false;
     }

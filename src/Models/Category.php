@@ -14,12 +14,17 @@ class Category extends Database
         $pdo = self::getConnection();
 
         $stmt = $pdo->prepare("
-            INSERT INTO categories (name)
-            VALUES (?)
+            INSERT INTO categories 
+            (
+                name,
+                created_at
+            )
+            VALUES (?, ?)
         ");
 
         $stmt->execute([
-            $data['name']
+            $data['name'],
+            date('Y-m-d H:i:s')
         ]);
 
         return $pdo->lastInsertId() > 0 ? true : false;
@@ -53,14 +58,16 @@ class Category extends Database
             UPDATE
                 categories
             SET 
-                name = ?
+                name = ?,
+                updated_at = ?
             WHERE 
                 id = ?
         ');
 
         $name = $data['name'] ?? '';
+        $updatedAt = date('Y-m-d H:i:s');
 
-        $stmt->execute([$name, $id]);
+        $stmt->execute([$name, $updatedAt, $id]);
 
         return $stmt->rowCount() > 0 ? true : false;
     }
